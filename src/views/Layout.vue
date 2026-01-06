@@ -1,6 +1,7 @@
 <script setup>
 import { getCurrentInstance, onMounted, ref } from 'vue'
 import LayoutHeader from '@/views/LayoutHeader.vue'
+import Account from '@/views/account/Account.vue'
 const { proxy } = getCurrentInstance()
 
 onMounted(() => {
@@ -37,10 +38,12 @@ function windowScrollHandler() {
     </div>
 
     <div class="body-inner"></div>
+
+    <Account></Account>
   </div>
 </template>
 
-<style>
+<style lang="scss">
 body {
   background: #ededed !important;
   padding: 0;
