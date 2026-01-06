@@ -1,4 +1,5 @@
-import "@/assets/base.scss"
+import "@/assets/scss/base.scss"
+import "@/assets/icon/iconfont.css"
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -17,4 +18,6 @@ app.use(router)
 app.use(ElementPlus)
 
 app.config.globalProperties.VueCookies = VueCookies;
+app.config.globalProperties.bodyMaxWidth = window.widths;
+app.config.globalProperties.bodyMinWidth = 320;
 app.mount('#app')
