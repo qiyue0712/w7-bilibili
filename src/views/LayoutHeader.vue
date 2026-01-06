@@ -2,27 +2,29 @@
 const props = defineProps({
   theme: {
     type: String,
-    default: "light", // light 白色 dark 黑色
-  }
+    default: 'light', // light 白色 dark 黑色
+  },
 })
 </script>
 
 <template>
   <div :class="['header-bar', 'header-bar-' + props.theme]">
     <div class="menu">
-      <router-link class="iconfont icon-logo" to="">首页</router-link>
+      <router-link class="iconfont icon-logo" to="/">首页</router-link>
     </div>
     <div class="search-body">
       <div class="search-panel">
         <div class="search-panel-inner">
-          <input/>
-          <div class="iconfont icon-search"></div>
+          <div class="input-panel">
+            <input />
+            <div class="iconfont icon-search"></div>
+          </div>
         </div>
       </div>
     </div>
     <div class="user-panel">
       <div class="user-avatar">
-        <img src="@/assets/user.png"/>
+        <img src="@/assets/user.png" />
       </div>
       <div class="user-panel-item">
         <div class="iconfont icon-message"></div>
@@ -65,11 +67,62 @@ const props = defineProps({
     }
     .icon-logo {
       font-size: 14px;
-      &::before{
+      &::before {
         float: left;
         margin-top: -2px;
         font-size: 20px;
         margin-right: 5px;
+      }
+    }
+  }
+
+  .search-body {
+    color: #61666d;
+    .search-panel {
+      margin: 0 auto;
+      position: relative;
+      max-width: 360px;
+      .search-panel-inner {
+        width: 100%;
+        position: absolute;
+        top: 10px;
+        left: 0;
+        border: 1px solid #e3e5e7;
+        border-radius: 8px;
+        overflow: hidden;
+        z-index: 1001;
+        .input-panel {
+          display: flex;
+          align-items: center;
+          background: #f1f2f3;
+          input {
+            width: 100%;
+            border: none;
+            background: #f1f2f3;
+            border-radius: 5px;
+            padding: 8px 10px;
+            margin: 3px 10px;
+            &:focus {
+              outline: none;
+            }
+          }
+          .iconfont {
+            font-size: 16px;
+            margin-right: 10px;
+            color: #2f3238;
+            width: 35px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            cursor: pointer;
+            &:hover {
+              background: #dddddd;
+            }
+          }
+
+        }
       }
     }
   }
@@ -115,7 +168,6 @@ const props = defineProps({
         .text {
           font-size: 14px;
         }
-
       }
     }
   }
