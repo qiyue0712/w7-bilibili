@@ -1,23 +1,23 @@
 <script setup>
 import Request from '@/utils/Request.js'
 import Dialog from '@/components/Dialog.vue'
-import { ref, getCurrentInstance, nextTick } from 'vue'
-const {proxy} = getCurrentInstance();
+import { ref, getCurrentInstance, nextTick, onMounted } from 'vue'
+const { proxy } = getCurrentInstance()
 import Verify from '@/utils/Verify.js'
 import { useLoginStore } from '@/stores/loginStore.js'
 import { Api } from '@/utils/Api.js'
 
-const loginStore = useLoginStore();
+const loginStore = useLoginStore()
 
-const checkCodeInfo = ref({});
+const checkCodeInfo = ref({})
 const changeCheckCode = async () => {
   let result = await Request({
-    url: Api.checkCode
-  });
+    url: Api.checkCode,
+  })
   if (!result) {
     return
   }
-  checkCodeInfo.value = result.data;
+  checkCodeInfo.value = result.data
 }
 
 const dialogConfig = ref({
@@ -30,7 +30,7 @@ const formDataRef = ref()
 
 const checkPassword = (rule, value, callback) => {
   if (value !== formData.value.registerPassword) {
-    callback(new Error(rule.message));
+    callback(new Error(rule.message))
   } else {
     callback()
   }
@@ -38,51 +38,55 @@ const checkPassword = (rule, value, callback) => {
 const rules = {
   email: [
     { required: true, message: '请输入邮箱' },
-    { validator: Verify.email, message: "请输入正确的邮箱"}
+    { validator: Verify.email, message: '请输入正确的邮箱' },
   ],
   password: [{ required: true, message: '请输入密码' }],
   nickName: [{ required: true, message: '请输入昵称' }],
   registerPassword: [
     { required: true, message: '请输入密码' },
-    { validator: Verify.password, message: "密码只能是数字, 字母, 特殊字符, 8-18位"}
+    { validator: Verify.password, message: '密码只能是数字, 字母, 特殊字符, 8-18位' },
   ],
   reRegisterPassword: [
     { required: true, message: '请再次输入密码' },
-    { validator: checkPassword, message: "两次输入密码不一致"}
+    { validator: checkPassword, message: '两次输入密码不一致' },
   ],
-  checkCode: [{ required: true, message: '请输入图片验证码'}]
+  checkCode: [{ required: true, message: '请输入图片验证码' }],
 }
 
 const opType = ref(1)
 const showPanel = (type) => {
-  opType.value = type;
-  resetForm();
+  opType.value = type
+  resetForm()
 }
 
 const resetForm = () => {
-  changeCheckCode();
+  changeCheckCode()
   nextTick(() => {
-    formDataRef.value.resetFields();
-    formData.value = {};
+    formDataRef.value.resetFields()
+    formData.value = {}
   })
 }
 
 const doSubmit = () => {
   formDataRef.value.validate(async (valid) => {
     if (!valid) {
-      return;
+      return
     }
-    let params = {};
-    Object.assign(params, formData.value);
+    let params = {}
+    Object.assign(params, formData.value)
     let result = await proxy.Request({
       url: api.xxx,
-      params
-    });
+      params,
+    })
     if (!result) {
-      return;
+      return
     }
   })
 }
+
+onMounted(() => {
+  showPanel(1)
+})
 </script>
 
 <template>
@@ -178,17 +182,13 @@ const doSubmit = () => {
         <el-form-item prop="checkCode">
           <div class="check-code-panel">
             <div class="input">
-              <el-input
-                placeholder="请输入验证码"
-                v-model.trim="formData.checkCode"
-                size="large"
-              >
+              <el-input placeholder="请输入验证码" v-model.trim="formData.checkCode" size="large">
                 <template #prefix>
                   <span class="iconfont icon-checkcode"></span>
                 </template>
               </el-input>
             </div>
-            <img :src="checkCodeInfo.checkCode" @click="changeCheckCode" alt=""/>
+            <img :src="checkCodeInfo.checkCode" @click="changeCheckCode" alt="" />
           </div>
         </el-form-item>
         <el-form-item prop="">
@@ -241,6 +241,9 @@ const doSubmit = () => {
     }
     .right-panel {
       margin-left: 5px;
+      cursor: pointer;
+    }
+    img {
       cursor: pointer;
     }
   }
