@@ -1,10 +1,18 @@
 <script setup>
+import { useLoginStore } from '@/stores/loginStore.js'
+
 const props = defineProps({
   theme: {
     type: String,
     default: 'light', // light 白色 dark 黑色
   },
 })
+
+const loginStore = useLoginStore()
+
+const login = () => {
+  loginStore.setLogin(true)
+}
 </script>
 
 <template>
@@ -23,7 +31,7 @@ const props = defineProps({
       </div>
     </div>
     <div class="user-panel">
-      <div class="user-avatar">
+      <div class="user-avatar" @click="login">
         <img src="@/assets/user.png" />
       </div>
       <div class="user-panel-item">

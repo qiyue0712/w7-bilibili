@@ -1,11 +1,12 @@
 <script setup>
 import Request from '@/utils/Request.js'
 import Dialog from '@/components/Dialog.vue'
-import { ref, getCurrentInstance, nextTick, onMounted } from 'vue'
+import { ref, getCurrentInstance, nextTick, onMounted, onUpdated } from 'vue'
 const { proxy } = getCurrentInstance()
 import Verify from '@/utils/Verify.js'
 import { useLoginStore } from '@/stores/loginStore.js'
 import { Api } from '@/utils/Api.js'
+import Message from '@/utils/Message.js'
 
 const loginStore = useLoginStore()
 
@@ -21,7 +22,6 @@ const changeCheckCode = async () => {
 }
 
 const dialogConfig = ref({
-  show: true,
   buttons: [],
 })
 
@@ -56,7 +56,9 @@ const rules = {
 const opType = ref(1)
 const showPanel = (type) => {
   opType.value = type
-  resetForm()
+  if (loginStore.showLogin) {
+    resetForm()
+  }
 }
 
 const resetForm = () => {
@@ -74,15 +76,36 @@ const doSubmit = () => {
     }
     let params = {}
     Object.assign(params, formData.value)
-    let result = await proxy.Request({
-      url: api.xxx,
+    params.checkCodeKey = checkCodeInfo.value.checkCodeKey
+    let result = await Request({
+      url: opType.value === 0 ? Api.register : Api.login,
       params,
+      errorCallback: () => {
+        changeCheckCode()
+      },
     })
     if (!result) {
       return
     }
+
+    if (opType.value === 0) {
+      Message.success('注册成功, 请登录')
+      showPanel(1)
+    } else if (opType.value === 1) {
+      Message.success('登录成功')
+      loginStore.setLogin(false)
+      loginStore.saveUserInfo(result.data)
+    }
   })
 }
+
+const closeDialog = () => {
+  loginStore.setLogin(false)
+}
+
+onUpdated(() => {
+  showPanel(1)
+})
 
 onMounted(() => {
   showPanel(1)
@@ -91,10 +114,10 @@ onMounted(() => {
 
 <template>
   <Dialog
-    :show="dialogConfig.show"
+    :show="loginStore.showLogin"
     width="820px"
     :show-cancel="false"
-    @close="dialogConfig.show = false"
+    @close="closeDialog"
   >
     <div class="dialog-panel">
       <div class="bg">
