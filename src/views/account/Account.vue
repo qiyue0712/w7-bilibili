@@ -1,8 +1,24 @@
 <script setup>
+import Request from '@/utils/Request.js'
 import Dialog from '@/components/Dialog.vue'
 import { ref, getCurrentInstance, nextTick } from 'vue'
 const {proxy} = getCurrentInstance();
 import Verify from '@/utils/Verify.js'
+import { useLoginStore } from '@/stores/loginStore.js'
+import { Api } from '@/utils/Api.js'
+
+const loginStore = useLoginStore();
+
+const checkCodeInfo = ref({});
+const changeCheckCode = async () => {
+  let result = await Request({
+    url: Api.checkCode
+  });
+  if (!result) {
+    return
+  }
+  checkCodeInfo.value = result.data;
+}
 
 const dialogConfig = ref({
   show: true,
@@ -44,6 +60,7 @@ const showPanel = (type) => {
 }
 
 const resetForm = () => {
+  changeCheckCode();
   nextTick(() => {
     formDataRef.value.resetFields();
     formData.value = {};
@@ -171,7 +188,7 @@ const doSubmit = () => {
                 </template>
               </el-input>
             </div>
-            <img src="" alt=""/>
+            <img :src="checkCodeInfo.checkCode" @click="changeCheckCode" alt=""/>
           </div>
         </el-form-item>
         <el-form-item prop="">

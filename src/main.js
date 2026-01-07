@@ -12,6 +12,8 @@ import router from './router'
 import VueCookies from 'vue-cookies'
 import Dialog from '@/components/Dialog.vue'
 import Verify from '@/utils/Verify.js'
+import Request from '@/utils/Request.js'
+import Message from '@/utils/Message.js'
 
 const app = createApp(App)
 
@@ -25,4 +27,6 @@ app.config.globalProperties.VueCookies = VueCookies;
 app.config.globalProperties.bodyMaxWidth = window.widths;
 app.config.globalProperties.bodyMinWidth = 320;
 app.config.globalProperties.Verify = Verify;
+app.config.globalProperties.Request = Request;
+app.config.globalProperties.Message = Message;
 app.mount('#app')
